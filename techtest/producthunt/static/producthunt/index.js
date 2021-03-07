@@ -224,7 +224,7 @@ class ProductList extends React.Component {
                     <div key={product.id} className="my_container row">
                         <img src={product.logo} className="col-2 h-100 pointer" onClick={this.showProduct} data-id={product.id} data-day={this.state.products_of_the_day.includes(product)} />
                         <div className="col-6 pointer" onClick={this.showProduct} data-id={product.id} data-day={this.state.products_of_the_day.includes(product)}>
-                            <div>{product.name}</div>
+                            <h3>{product.name}</h3>
                             <div>{product.description}</div>
                         </div>
                         {this.state.products_of_the_day.includes(product) && <div className="col-2"><span className="badge bg-warning text-dark">Product of the day</span></div>}

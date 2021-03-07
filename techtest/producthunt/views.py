@@ -75,6 +75,7 @@ def register(request):
 
 def products(request, date):
     products = Product.objects.filter(date=date)
+    products = products.order_by("-votes").all()
     if request.user.is_authenticated:
         voted_products = request.user.voted_products.all()
         return JsonResponse({'products': [product.serialize() for product in products], 'voted_products': [product.serialize() for product in voted_products]}, safe=False)
@@ -110,6 +111,7 @@ def vote(request):
         user = User.objects.get(pk=request.user.id)
         product.votes.add(user)
         products = Product.objects.filter(date=data.get("date"))
+        products = products.order_by("-votes").all()
         voted_products = user.voted_products.all()
         return JsonResponse({'products': [product.serialize() for product in products], 'voted_products': [product.serialize() for product in voted_products]}, safe=False)
     else:
@@ -123,5 +125,6 @@ def unvote(request):
     user = User.objects.get(pk=request.user.id)
     product.votes.remove(user)
     products = Product.objects.filter(date=data.get("date"))
+    products = products.order_by("-votes").all()
     voted_products = user.voted_products.all()
     return JsonResponse({'products': [product.serialize() for product in products], 'voted_products': [product.serialize() for product in voted_products]}, safe=False)
