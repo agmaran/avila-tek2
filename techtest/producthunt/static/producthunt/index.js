@@ -1,12 +1,13 @@
 class ProductList extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { products: [], show: true, voted_products: [], voted_products_ids: [], date: new Date(), products_of_the_day: [] };
+        this.state = { products: [], voted_products: [], voted_products_ids: [], date: new Date(), products_of_the_day: [] };
         this.showProduct = this.showProduct.bind(this);
         this.vote = this.vote.bind(this);
         this.unvote = this.unvote.bind(this);
         this.newer = this.newer.bind(this);
         this.older = this.older.bind(this);
+        this.reminder = this.reminder.bind(this);
     }
 
     componentDidMount() {
@@ -24,7 +25,7 @@ class ProductList extends React.Component {
                 } else {
                     this.setState({ products: result.products })
                 }
-                var counter = 0
+                var counter = 1
                 var p = []
                 if (result.products !== null) {
                     result.products.map((product) => {
@@ -61,7 +62,7 @@ class ProductList extends React.Component {
                 } else {
                     this.setState({ products: result.products })
                 }
-                var counter = 0
+                var counter = 1
                 var p = []
                 if (result.products !== null) {
                     result.products.map((product) => {
@@ -99,7 +100,7 @@ class ProductList extends React.Component {
                 } else {
                     this.setState({ products: result.products })
                 }
-                var counter = 0
+                var counter = 1
                 var p = []
                 if (result.products !== null) {
                     result.products.map((product) => {
@@ -123,8 +124,7 @@ class ProductList extends React.Component {
     }
 
     showProduct(event) {
-        this.setState({ show: false })
-        ReactDOM.render(<Product id={event.currentTarget.getAttribute("data-id")} />, document.querySelector('#index'))
+        ReactDOM.render(<Product id={event.currentTarget.getAttribute("data-id")} day={event.currentTarget.getAttribute("data-day")} />, document.querySelector('#index'))
     }
 
     vote(event) {
@@ -150,7 +150,7 @@ class ProductList extends React.Component {
                     } else {
                         this.setState({ products: result.products })
                     }
-                    var counter = 0
+                    var counter = 1
                     var p = []
                     if (result.products !== null) {
                         result.products.map((product) => {
@@ -190,7 +190,7 @@ class ProductList extends React.Component {
                 } else {
                     this.setState({ products: result.products })
                 }
-                var counter = 0
+                var counter = 1
                 var p = []
                 if (result.products !== null) {
                     result.products.map((product) => {
@@ -208,6 +208,10 @@ class ProductList extends React.Component {
             })
     }
 
+    reminder() {
+        ReactDOM.render(<Alert message="You can't vote because you are registered as founder." />, document.querySelector('#alert'))
+    }
+
     render() {
         let date = this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate();
         let d = new Date()
@@ -218,28 +222,30 @@ class ProductList extends React.Component {
             var products = this.state.products.map((product) => {
                 return (
                     <div key={product.id} className="container row">
-                        <img src={product.logo} className="col-2 h-100 pointer" onClick={this.showProduct} data-id={product.id} />
-                        <div className="col-6 pointer" onClick={this.showProduct} data-id={product.id}>
+                        <img src={product.logo} className="col-2 h-100 pointer" onClick={this.showProduct} data-id={product.id} data-day={this.state.products_of_the_day.includes(product)} />
+                        <div className="col-6 pointer" onClick={this.showProduct} data-id={product.id} data-day={this.state.products_of_the_day.includes(product)}>
                             <div>{product.name}</div>
                             <div>{product.description}</div>
                         </div>
+                        {this.state.products_of_the_day.includes(product) && <div className="col-2"><span className="badge bg-warning text-dark">Product of the day</span></div>}
+                        {!this.state.products_of_the_day.includes(product) && <div className="col-2"></div>}
                         <div className="col-2">
-                            {!this.state.voted_products_ids.includes(product.id) && <a data-product={product.id} onClick={this.vote}>{product.votes}<i className="bi bi-star ml-3 mr-1 pointer"></i></a>}
-                            {this.state.voted_products_ids.includes(product.id) && <a data-product={product.id} onClick={this.unvote}>{product.votes}<i className="bi bi-star-fill ml-3 mr-1 pointer"></i></a>}
+                            {!this.state.voted_products_ids.includes(product.id) && document.querySelector('#new-product-button') === null && <button type="button" className="btn btn-outline-secondary button-height" data-product={product.id} onClick={this.vote}>{product.votes} <i className="bi bi-star ml-3 mr-1 pointer"></i></button>}
+                            {this.state.voted_products_ids.includes(product.id) && document.querySelector('#new-product-button') === null && <button type="button" className="btn btn-outline-danger button-height" data-product={product.id} onClick={this.unvote}>{product.votes} <i className="bi bi-star-fill ml-3 mr-1 pointer"></i></button>}
+                            {document.querySelector('#username') !== null && document.querySelector('#new-product-button') !== null && <button type="button" className="btn btn-outline-dark button-height" onClick={this.reminder}>{product.votes} <i className="bi bi-star ml-3 mr-1 pointer"></i></button>}
                         </div>
-                        {this.state.products_of_the_day.includes(product) && <div className="col-2">Product of the Day</div>}
                     </div>
                 )
             })
 
             return (
                 <div>
-                    {this.state.show && date === today && <h3 className="padding">Today</h3>}
-                    {this.state.show && date === yesterday && <h3 className="padding">Yesterday</h3>}
-                    {this.state.show && date !== yesterday && date !== today && <h3 className="padding">{this.state.date.getMonth() + 1}/{this.state.date.getDate()}/{this.state.date.getFullYear()}</h3>}
-                    {this.state.show && <div>{products}</div>}
-                    {this.state.show && <nav aria-label="Page navigation example" className="col-12">
-                        <ul className="pagination">
+                    {date === today && <h3 className="padding">Today</h3>}
+                    {date === yesterday && <h3 className="padding">Yesterday</h3>}
+                    {date !== yesterday && date !== today && <h3 className="padding">{this.state.date.getMonth() + 1}/{this.state.date.getDate()}/{this.state.date.getFullYear()}</h3>}
+                    {<div>{products}</div>}
+                    {<nav aria-label="Page navigation example" className="col-12">
+                        <ul className="pagination margin">
                             {!(date === today) && <li className="page-item"><a className="page-link pointer" onClick={this.newer}>Newer</a></li>}
                             <li className="page-item"><a className="page-link pointer" onClick={this.older}>Older</a></li>
                         </ul>
@@ -249,12 +255,12 @@ class ProductList extends React.Component {
         } else {
             return (
                 <div>
-                    {this.state.show && date === today && <h3 className="padding">Today</h3>}
-                    {this.state.show && date === yesterday && <h3 className="padding">Yesterday</h3>}
-                    {this.state.show && date !== yesterday && date !== today && <h3 className="padding">{this.state.date.getMonth() + 1}/{this.state.date.getDate()}/{this.state.date.getFullYear()}</h3>}
-                    <div>There were no products launched the {this.state.date.getMonth() + 1}/{this.state.date.getDate()}/{this.state.date.getFullYear()}.</div>
+                    {date === today && <h3 className="padding">Today</h3>}
+                    {date === yesterday && <h3 className="padding">Yesterday</h3>}
+                    {date !== yesterday && date !== today && <h3 className="padding">{this.state.date.getMonth() + 1}/{this.state.date.getDate()}/{this.state.date.getFullYear()}</h3>}
+                    <div className="margin">There were no products launched the {this.state.date.getMonth() + 1}/{this.state.date.getDate()}/{this.state.date.getFullYear()}.</div>
                     <nav aria-label="Page navigation example" className="col-12">
-                        <ul className="pagination">
+                        <ul className="pagination margin">
                             {!(date === today) && <li className="page-item"><a className="page-link pointer" onClick={this.newer}>Newer</a></li>}
                             <li className="page-item"><a className="page-link pointer" onClick={this.older}>Older</a></li>
                         </ul>
@@ -331,10 +337,10 @@ class NewProductForm extends React.Component {
                 link: this.state.link
             })
         })
-            .then(response => response.jason())
+            .then(response => response.json())
             .then(result => {
                 if (result.error) {
-                    console.log(result.error)
+                    ReactDOM.render(<Alert message={result.error} />, document.querySelector('#alert'))
                 } else {
                     window.location = '/'
                 }
@@ -395,26 +401,54 @@ class Product extends React.Component {
     }
 
     goHome() {
-        window.location = '/'
+        ReactDOM.render(<ProductList />, document.querySelector('#index'))
     }
     render() {
         return (
-            <div className="row">
-                <a class="page-link" onClick={this.goHome}>
-                    <span>&laquo;</span>
-                </a>
-                <img src={this.state.product.logo} className="col-2 h-100" />
-                <div className="col-10">
-                    <div>{this.state.product.name}</div>
-                    <div>{this.state.product.description}</div>
-                </div>
-                <div></div>
+            <div>
+                <button className="new" onClick={this.goHome}>X</button>
                 <div className="row">
-                    <img src={this.state.product.image1} className="col-4 h-100" />
-                    <img src={this.state.product.image2} className="col-4 h-100" />
-                    <img src={this.state.product.image3} className="col-4 h-100" />
+
+                    <img src={this.state.product.logo} className="col-2 h-100" />
+                    <div className="col-8">
+                        <h3>{this.state.product.name}</h3>
+                        <div>{this.state.product.description}</div>
+                    </div>
+                    <div className="col-2">
+                        {this.props.day === 'true' && <div ><span class="badge bg-warning text-dark">Product of the day</span></div>}
+                        <a href={this.state.product.link} class="button3">GET IT</a>
+                    </div>
                 </div>
+                <div className="row margin">
+                    <img src={this.state.product.image1} className="col-4 h-150" />
+                    <img src={this.state.product.image2} className="col-4 h-150" />
+                    <img src={this.state.product.image3} className="col-4 h-150" />
+                </div>
+
             </div>
         )
+    }
+}
+
+class Alert extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { show: true }
+        this.dismiss = this.dismiss.bind(this);
+    }
+
+    dismiss() {
+        this.setState({ show: false })
+    }
+
+    render() {
+        if (this.state.show) {
+            return (
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    {this.props.message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onClick={this.dismiss}></button>
+                </div>
+            )
+        }
     }
 }
