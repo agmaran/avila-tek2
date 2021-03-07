@@ -85,9 +85,9 @@ def products(request, date):
 @csrf_exempt
 def newproduct(request):
     data = json.loads(request.body)
-    if data.get("name") == "" or data.get("description") == "" or data.get("logo") == "" or data.get("image1") == "" or data.get("image2") == "" or data.get("image3") == "" or data.get("link") == "":
+    if data.get("name") == "" or data.get("description") == "" or data.get("logo") == "" or data.get("image1") == "" or data.get("link") == "":
         return JsonResponse({
-            "error": "All fields are required."
+            "error": "You are missing some required fields."
         })
     else:
         product = Product(

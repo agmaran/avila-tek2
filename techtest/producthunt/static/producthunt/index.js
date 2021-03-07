@@ -221,7 +221,7 @@ class ProductList extends React.Component {
         if (this.state.products.length > 0) {
             var products = this.state.products.map((product) => {
                 return (
-                    <div key={product.id} className="container row">
+                    <div key={product.id} className="my_container row">
                         <img src={product.logo} className="col-2 h-100 pointer" onClick={this.showProduct} data-id={product.id} data-day={this.state.products_of_the_day.includes(product)} />
                         <div className="col-6 pointer" onClick={this.showProduct} data-id={product.id} data-day={this.state.products_of_the_day.includes(product)}>
                             <div>{product.name}</div>
@@ -351,31 +351,46 @@ class NewProductForm extends React.Component {
 
     render() {
         return (
-            <div className="margin">
-                <h3>New Product</h3>
-                <div className="form-group margin">
-                    <input name="name" className="form-control" autoFocus type="text" placeholder="Product Name" value={this.state.name} onChange={this.handleInputChange} />
+            <div className="container">
+                <div className="row">
+                    <div className="margin col-6">
+                        <h3>New Product</h3>
+                        <div className="form-group margin">
+                            <input maxLength="50" name="name" className="form-control" autoFocus type="text" placeholder="Product Name" value={this.state.name} onChange={this.handleInputChange} />
+                        </div>
+                        <div className="form-group margin">
+                            <input maxLength="100" name="description" className="form-control" placeholder="Short product description" value={this.state.description} onChange={this.handleInputChange} />
+                        </div>
+                        <div className="form-group margin">
+                            <input name="logo" className="form-control" type="url" placeholder="Logo URL" value={this.state.logo} onChange={this.handleInputChange} />
+                        </div>
+                        <div className="form-group margin">
+                            <input name="image1" className="form-control" type="url" placeholder="Image URL" value={this.state.image1} onChange={this.handleInputChange} />
+                        </div>
+                        <div className="form-group margin">
+                            <input name="image2" className="form-control" type="url" placeholder="Image URL" value={this.state.image2} onChange={this.handleInputChange} />
+                        </div>
+                        <div className="form-group margin">
+                            <input name="image3" className="form-control" type="url" placeholder="Image URL" value={this.state.image3} onChange={this.handleInputChange} />
+                        </div>
+                        <div className="form-group margin">
+                            <input name="link" className="form-control" type="url" placeholder="Product link" value={this.state.link} onChange={this.handleInputChange} />
+                        </div>
+                        <input className="btn btn-primary" type="submit" value="Create" onClick={this.createProduct} />
+                    </div>
+                    <div className="col">
+                        {this.state.logo !== '' && <img src={this.state.logo} className="w-100 h-50" />}
+                        {this.state.logo === '' && <img src="https://www.lookatourworld.com/wp-content/uploads/2018/08/No-Image-Provided-1.png" className="w-100 h-50" />}
+                        {this.state.image1 !== '' && <img src={this.state.image1} className="w-100 h-50" />}
+                        {this.state.image1 === '' && <img src="https://www.lookatourworld.com/wp-content/uploads/2018/08/No-Image-Provided-1.png" className="w-100 h-50" />}
+                    </div>
+                    <div className="col">
+                        {this.state.image2 !== '' && <img src={this.state.image2} className="w-100 h-50" />}
+                        {this.state.image2 === '' && <img src="https://www.lookatourworld.com/wp-content/uploads/2018/08/No-Image-Provided-1.png" className="w-100 h-50" />}
+                        {this.state.image3 !== '' && <img src={this.state.image3} className="w-100 h-50" />}
+                        {this.state.image3 === '' && <img src="https://www.lookatourworld.com/wp-content/uploads/2018/08/No-Image-Provided-1.png" className="w-100 h-50" />}
+                    </div>
                 </div>
-                <div className="form-group margin">
-                    <label htmlFor="description">Short description</label>
-                    <textarea name="description" className="form-control" value={this.state.description} onChange={this.handleInputChange}></textarea>
-                </div>
-                <div className="form-group margin">
-                    <input name="logo" className="form-control" type="url" placeholder="Logo URL" value={this.state.logo} onChange={this.handleInputChange} />
-                </div>
-                <div className="form-group margin">
-                    <input name="image1" className="form-control" type="url" placeholder="Image URL" value={this.state.image1} onChange={this.handleInputChange} />
-                </div>
-                <div className="form-group margin">
-                    <input name="image2" className="form-control" type="url" placeholder="Image URL" value={this.state.image2} onChange={this.handleInputChange} />
-                </div>
-                <div className="form-group margin">
-                    <input name="image3" className="form-control" type="url" placeholder="Image URL" value={this.state.image3} onChange={this.handleInputChange} />
-                </div>
-                <div className="form-group margin">
-                    <input name="link" className="form-control" type="url" placeholder="Product link" value={this.state.link} onChange={this.handleInputChange} />
-                </div>
-                <input className="btn btn-primary" type="submit" value="Create" onClick={this.createProduct} />
             </div>
         )
     }
@@ -415,7 +430,7 @@ class Product extends React.Component {
                         <div>{this.state.product.description}</div>
                     </div>
                     <div className="col-2">
-                        {this.props.day === 'true' && <div ><span class="badge bg-warning text-dark">Product of the day</span></div>}
+                        {this.props.day === 'true' && <div ><span className="badge bg-warning text-dark">Product of the day</span></div>}
                         <a href={this.state.product.link} class="button3">GET IT</a>
                     </div>
                 </div>

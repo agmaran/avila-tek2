@@ -7,8 +7,8 @@ class User(AbstractUser):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=64)
-    description = models.TextField(max_length=255)
+    name = models.CharField(max_length=50, unique=True)
+    description = models.CharField(max_length=100)
     logo = models.URLField()
     image1 = models.URLField()
     image2 = models.URLField()
