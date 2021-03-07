@@ -1,0 +1,55 @@
+.container {
+    width: 80%;
+    height: 10rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+    position: relative;
+    background-color: ghostwhite;
+    border-radius: 2rem;
+}
+
+.container:hover {
+    background-color: lightcyan;
+}
+
+.new {
+    background-color: #4caf50;
+    border: none;
+    color: white;
+    padding: 0px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 1rem;
+    margin: 4px 2px;
+    border-radius: 50%;
+    float: right;
+    height: 40px;
+    width: 40px;
+}
+
+.padding {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.product_list_container {
+    width: 100%;
+    height: auto;
+    background-color: lightgrey;
+    position: relative;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.margin {
+    margin: 1rem;
+}
+
+.right {
+    margin-right: 0;
+}
