@@ -12,7 +12,7 @@ class ProductList extends React.Component {
 
     componentDidMount() {
         let date = this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate();
-        fetch(`/products/${date}`)
+        fetch(`https://producthunttechtest.herokuapp.com/products/${date}`)
             .then(response => response.json())
             .then(result => {
                 console.log(result.products)
@@ -49,7 +49,7 @@ class ProductList extends React.Component {
     newer() {
         this.state.date.setDate(this.state.date.getDate() + 1);
         let date = this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate();
-        fetch(`/products/${date}`)
+        fetch(`https://producthunttechtest.herokuapp.com/products/${date}`)
             .then(response => response.json())
             .then(result => {
                 console.log(result.products)
@@ -87,7 +87,7 @@ class ProductList extends React.Component {
     older() {
         this.state.date.setDate(this.state.date.getDate() - 1);
         let date = this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate();
-        fetch(`/products/${date}`)
+        fetch(`https://producthunttechtest.herokuapp.com/products/${date}`)
             .then(response => response.json())
             .then(result => {
                 console.log(result.products)
@@ -129,7 +129,7 @@ class ProductList extends React.Component {
 
     vote(event) {
         let date = this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate();
-        fetch('/vote', {
+        fetch('https://producthunttechtest.herokuapp.com/vote', {
             method: 'POST',
             body: JSON.stringify({
                 product_id: event.currentTarget.getAttribute("data-product"),
@@ -171,7 +171,7 @@ class ProductList extends React.Component {
 
     unvote(event) {
         let date = this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate();
-        fetch('/unvote', {
+        fetch('https://producthunttechtest.herokuapp.com/unvote', {
             method: 'POST',
             body: JSON.stringify({
                 product_id: event.currentTarget.getAttribute("data-product"),
@@ -326,7 +326,7 @@ class NewProductForm extends React.Component {
 
     createProduct(event) {
 
-        fetch('/newproduct', {
+        fetch('https://producthunttechtest.herokuapp.com/newproduct', {
             method: 'POST',
             body: JSON.stringify({
                 name: this.state.name,
@@ -406,7 +406,7 @@ class Product extends React.Component {
     }
 
     componentDidMount() {
-        fetch(`/product/${this.props.id}`)
+        fetch(`https://producthunttechtest.herokuapp.com/product/${this.props.id}`)
             .then(response => response.json())
             .then(result => {
                 console.log(result.product)
