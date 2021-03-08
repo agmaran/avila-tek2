@@ -7,7 +7,30 @@ from django.shortcuts import render
 from django.urls import reverse
 from .models import User, Product
 from django.views.decorators.csrf import csrf_exempt
+import mimetypes
+from urllib.request import urlopen
 
+def is_url_image(url):    
+    mimetype,encoding = mimetypes.guess_type(url)
+    return (mimetype and mimetype.startswith('image'))
+
+def check_url(url):
+    """Returns True if the url returns a response code between 200-300,
+       otherwise return False.
+    """
+    try:
+        headers = {
+            "Range": "bytes=0-10",
+            "User-Agent": "MyTestAgent",
+            "Accept": "*/*"
+        }
+        response = urlopen(url)
+        return response.code in range(200, 209)
+    except Exception:
+        return False
+
+def is_image_and_ready(url):
+    return is_url_image(url) and check_url(url)
 
 def index(request):
     return render(request, "producthunt/index.html")
@@ -90,12 +113,16 @@ def newproduct(request):
         return JsonResponse({
             "error": "You are missing some required fields."
         })
-    else:
+    elif is_image_and_ready(data.get("logo")) and is_image_and_ready(data.get("image1")) and (data.get("image2") == "" or is_image_and_ready(data.get("image2"))) and (data.get("image3") == "" or is_image_and_ready(data.get("image3"))):
         product = Product(
             name=data.get("name"), description=data.get("description"), logo=data.get("logo"), image1=data.get("image1"), image2=data.get("image2"), image3=data.get("image3"), link=data.get("link"), founder=request.user
         )
         product.save()
         return JsonResponse({"message": "Product created sucessfully."})
+    else:
+         return JsonResponse({
+            "error": "One or more of the provided image URLs is not valid. The URL should end with an image file extension and exist."
+        })
 
 
 def product(request, id):
