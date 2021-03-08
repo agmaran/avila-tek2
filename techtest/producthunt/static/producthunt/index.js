@@ -325,6 +325,7 @@ class NewProductForm extends React.Component {
     }
 
     createProduct(event) {
+
         fetch('/newproduct', {
             method: 'POST',
             body: JSON.stringify({
@@ -342,11 +343,12 @@ class NewProductForm extends React.Component {
                 if (result.error) {
                     ReactDOM.render(<Alert message={result.error} />, document.querySelector('#alert'))
                 } else {
-                    window.location = '/'
+                    ReactDOM.render(<ProductList />, document.querySelector('#index'))
                 }
             })
 
         event.preventDefault();
+
     }
 
     render() {
@@ -359,7 +361,7 @@ class NewProductForm extends React.Component {
                             <input maxLength="50" name="name" className="form-control" autoFocus type="text" placeholder="Product Name" value={this.state.name} onChange={this.handleInputChange} />
                         </div>
                         <div className="form-group margin">
-                            <input maxLength="100" name="description" className="form-control" placeholder="Short product description" value={this.state.description} onChange={this.handleInputChange} />
+                            <input maxLength="100" name="description" className="form-control" type="text" placeholder="Short product description" value={this.state.description} onChange={this.handleInputChange} />
                         </div>
                         <div className="form-group margin">
                             <input name="logo" className="form-control" type="url" placeholder="Logo URL" value={this.state.logo} onChange={this.handleInputChange} />
